@@ -11,6 +11,7 @@ final float ITERS = 20;
 
 //control
 int ADDING = 0, MASSADDING = 1, PUSHING = 2, ROTATING = 3;
+String[] states = {"ADDING","MASSADDING","PUSHING","ROTATING"};
 boolean running = true, recording = false;
 boolean leftPressed, rightPressed, upPressed, downPressed, plusPressed, minusPressed;
 int state = 0;
@@ -30,7 +31,7 @@ double energychange;
 
 
 //display variables
-int WIDTH = 800, HEIGHT = 800;
+int WIDTH = 1600, HEIGHT = 1600;
 int halfHeight;
 float screenPosX, screenPosY;
 float MOUSEX, MOUSEY;
@@ -151,6 +152,18 @@ void keyPressed() {
     break;
   case 's':
     downPressed = true;
+    break;
+  case '1':
+    state = 0;
+    break;
+  case '2':
+    state = 1;
+    break;
+  case '3':
+    state = 2;
+    break;
+  case '4':
+    state = 3;
     break;
   }
   switch(keyCode) {
@@ -312,13 +325,23 @@ void drawScreen() {
   sidebar.beginDraw();
   sidebar.background(255, 150, 50);
   sidebar.fill(0, 0, 255);
-  sidebar.text("Entities: "+balls.size(), 10, 40);
-  sidebar.text("Time: "+time, 10, 80);
-  sidebar.text(String.format("KE = %.2f KJ", energy*3.6), 10, 120);
-  sidebar.text(String.format("ΔKE = %.2f KJ/s", energychange*216), 10, 160);
-  sidebar.text(String.format("P = [%.2f,%.2f]", momentum.x*60, momentum.y*60), 10, 200);
-  sidebar.text(String.format("Draw: %02dms | Calc: %02dms", millis()- timemillis, calcTime), 10, 240);
-
+  int pos = 40;
+  sidebar.text("Entities: "+balls.size(), 10, pos += 40);
+  sidebar.text("Time: "+time, 10, pos += 40);
+  sidebar.text(String.format("KE = %.2f KJ", energy*3.6), 10, pos += 40);
+  sidebar.text(String.format("ΔKE = %.2f KJ/s", energychange*216), 10, pos += 40);
+  sidebar.text(String.format("P = [%.2f,%.2f]", momentum.x*60, momentum.y*60), 10, pos += 40);
+  sidebar.text(String.format("Draw: %02dms | Calc: %02dms", millis()- timemillis, calcTime), 10, pos += 40);
+  sidebar.text(String.format("Tool: " + states[state]), 10, pos += 40);
+  //control documentation
+  sidebar.text("wasd -> Move frame",10,pos += 40);
+  sidebar.text("q e -> tool increment/decrement",10,pos += 40);
+  sidebar.text("+ - -> Scale",10,pos += 40);
+  sidebar.text("<> -> Speed increase/decrease",10,pos += 40);
+  sidebar.text("p -> pause",10,pos += 40);  
+  sidebar.text(". -> pause drawing (Performance++)",10,pos += 40);
+  sidebar.text("` -> being recording",10,pos += 40);
+  
   sidebar.endDraw();
   image(sidebar, height, 0);
   energyold = energy;
